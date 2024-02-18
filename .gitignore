@@ -1,3 +1,2 @@
-
 general_settings.py
-data/accounts_data.csv
+*.csv
