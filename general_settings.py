@@ -1,16 +1,16 @@
 """
 ------------------------------------------------GENERAL SETTINGS--------------------------------------------------------
-    WALLETS_TO_WORK = 0 | Софт будет брать кошельки из таблице по правилам, описаным снизу
-    0       = все кошельки подряд
-    3       = только кошелек №3
-    4, 20   = кошелек №4 и №20
-    [5, 25] = кошельки с №5 по №25
+    WALLETS_TO_WORK = 0 | The software will take wallets from the table according to the rules described below
+    0 = all wallets in a row
+    3 = only wallet №3
+    4, 20 = wallets №4 and №20
+    [5, 25] = wallets from №5 to №25
 
-    ACCOUNTS_IN_STREAM      | Количество кошельков в потоке на выполнение. Если всего 100 кошельков, а указать 10,
-                                то софт сделает 10 подходов по 10 кошельков
+    ACCOUNTS_IN_STREAM      | Number of wallets in the execution stream. If there are a total of 100 wallets and you specify 10,
+                            then the software will make 10 passes with 10 wallets each
 
-    EXCEL_PASSWORD          | Включает запрос пароля при входе в софт. Сначала установите пароль в таблице
-    EXCEL_PAGE_NAME         | Название листа в таблице. Пример: 'BeraChain'
+    EXCEL_PASSWORD          | Enables password request when entering the software. First set the password in the table
+    EXCEL_PAGE_NAME         | Name of the sheet in the table. Example: 'BeraChain'
 
 """
 SOFTWARE_MODE = 1               # 0 - последовательный запуск / 1 - параллельный запуск
