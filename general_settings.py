@@ -9,11 +9,8 @@
     ACCOUNTS_IN_STREAM      | Number of wallets in the execution stream. If there are a total of 100 wallets and you specify 10,
                             then the software will make 10 passes with 10 wallets each
 
-    EXCEL_PASSWORD          | Enables password request when entering the software. First set the password in the table
-    EXCEL_PAGE_NAME         | Name of the sheet in the table. Example: 'BeraChain'
-
 """
-SOFTWARE_MODE = 1               # 0 - последовательный запуск / 1 - параллельный запуск
+SOFTWARE_MODE = 0               # 0 - последовательный запуск / 1 - параллельный запуск
 ACCOUNTS_IN_STREAM = 10          # Только для SOFTWARE_MODE = 1 (параллельный запуск)
 WALLETS_TO_WORK = 0             # 0 / 3 / 3, 20 / [3, 20]
 BREAK_ROUTE = False             # Прекращает выполнение маршрута, если произойдет ошибка
@@ -40,10 +37,6 @@ MOBILE_PROXY_URL_CHANGER = ['',
 '------------------------------------------------SECURE DATA-----------------------------------------------------------'
 # https://2captcha.com/enterpage
 TWO_CAPTCHA_API_KEY = ""
-
-# EXCEL AND GOOGLE INFO
-EXCEL_PASSWORD = False
-EXCEL_PAGE_NAME = "Berachain"
 
 # TELEGRAM DATA
 TG_TOKEN = ""  # https://t.me/BotFather

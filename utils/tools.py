@@ -5,20 +5,16 @@ import random
 import asyncio
 import functools
 import traceback
-import msoffcrypto
 import pandas as pd
 
 from getpass import getpass
 from termcolor import cprint
 from web3.exceptions import TimeExhausted
-from msoffcrypto.exceptions import DecryptionError, InvalidKeyError
 
 from general_settings import (
     SLEEP_TIME,
     SLEEP_TIME_RETRY,
-    MAXIMUM_RETRY,
-    EXCEL_PASSWORD,
-    EXCEL_PAGE_NAME
+    MAXIMUM_RETRY
 )
 
 
@@ -64,8 +60,6 @@ def get_accounts_data():
             email_passwords = [item for item in email_passwords if item is not None]
 
             return acc_names, private_keys, proxies, email_addresses, email_passwords
-    except (DecryptionError, InvalidKeyError, DecryptionError, ValueError):
-        sys.exit()
 
     except ImportError:
         cprint(f'\nAre you sure about EXCEL_PASSWORD in general_settings.py?', color='light_red')

@@ -53,8 +53,7 @@ You can set a password for your table and enable the `EXCEL_PASSWORD setting = T
 All settings are moved to the `general_settings.py` file. The most important settings will be duplicated here.
 
 1. `TWO_CAPTCHA_API_KEY` key. Specify your API key from 2captcha. There is a link in the file to the website where you can get the key.
-2. Setting `EXCEL_PAGE_NAME`. The name of the sheet in the Excel table.
-3. In the `CLASSIC_ROUTES_MODULES_USING` setting, specify the route for account operation.
+2. In the `CLASSIC_ROUTES_MODULES_USING` setting, specify the route for account operation.
 
 ## 🛠️Installation and Project Launch
 
