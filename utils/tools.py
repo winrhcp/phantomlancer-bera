@@ -28,7 +28,7 @@ async def sleep(self, min_time=SLEEP_TIME[0], max_time=SLEEP_TIME[1]):
 def get_accounts_data():
     try:
          # Read data from CSV file
-        wb = pd.read_csv('./data/accounts_data.csv')
+        wb = pd.read_csv('./accounts_data.csv')
 
         accounts_data = {}
         for index, row in wb.iterrows():
