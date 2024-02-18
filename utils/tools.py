@@ -31,58 +31,24 @@ async def sleep(self, min_time=SLEEP_TIME[0], max_time=SLEEP_TIME[1]):
 
 def get_accounts_data():
     try:
-        decrypted_data = io.BytesIO()
-        with open('./data/accounts_data.xlsx', 'rb') as file:
-            if EXCEL_PASSWORD:
-                cprint('⚔️ Enter the password degen', color='light_blue')
-                password = getpass()
-                office_file = msoffcrypto.OfficeFile(file)
+         # Read data from CSV file
+        wb = pd.read_csv('./data/accounts_data.csv')
 
-                try:
-                    office_file.load_key(password=password)
-                except msoffcrypto.exceptions.DecryptionError:
-                    cprint('\n⚠️ Incorrect password to decrypt Excel file! ⚠️', color='light_red', attrs=["blink"])
-                    raise DecryptionError('Incorrect password')
+        accounts_data = {}
+        for index, row in wb.iterrows():
+            account_name = row["Name"]
+            private_key = row["Private Key"]
+            proxy = row["Proxy"]
+            email_address = row['Email Address']
+            email_password = row['Email Password']
 
-                try:
-                    office_file.decrypt(decrypted_data)
-                except msoffcrypto.exceptions.InvalidKeyError:
-                    cprint('\n⚠️ Incorrect password to decrypt Excel file! ⚠️', color='light_red', attrs=["blink"])
-                    raise InvalidKeyError('Incorrect password')
-
-                except msoffcrypto.exceptions.DecryptionError:
-                    cprint('\n⚠️ Set password on your Excel file first! ⚠️', color='light_red', attrs=["blink"])
-                    raise DecryptionError('Excel without password')
-
-                office_file.decrypt(decrypted_data)
-
-                try:
-                    wb = pd.read_excel(decrypted_data, sheet_name=EXCEL_PAGE_NAME)
-                except ValueError as error:
-                    cprint('\n⚠️ Wrong page name! ⚠️', color='light_red', attrs=["blink"])
-                    raise ValueError(f"{error}")
-            else:
-                try:
-                    wb = pd.read_excel(file, sheet_name=EXCEL_PAGE_NAME)
-                except ValueError as error:
-                    cprint('\n⚠️ Wrong page name! ⚠️', color='light_red', attrs=["blink"])
-                    raise ValueError(f"{error}")
-
-            accounts_data = {}
-            for index, row in wb.iterrows():
-                account_name = row["Name"]
-                private_key = row["Private Key"]
-                proxy = row["Proxy"]
-                email_address = row['Email Address']
-                email_password = row['Email Password']
-
-                accounts_data[int(index) + 1] = {
-                    "account_number": account_name,
-                    "private_key": private_key,
-                    "proxy": proxy,
-                    "email_address": email_address,
-                    "email_password": email_password,
-                }
+            accounts_data[int(index) + 1] = {
+                "account_number": account_name,
+                "private_key": private_key,
+                "proxy": proxy,
+                "email_address": email_address,
+                "email_password": email_password,
+            }
 
             acc_names, private_keys, proxies, email_addresses, email_passwords = [], [], [], [], []
             for k, v in accounts_data.items():
