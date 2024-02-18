@@ -1,104 +1,65 @@
-﻿
-# 🐻 BeraMachine
+﻿## General Information
 
-## Общая информация
+Software for testing the Berachain testnet. All settings are simple and clear, nothing extra.
+The path will be conquered by the one who walks it, and the software will conquer any degenerate 
 
-Софт для отработки тестнета Berachain. Все настройки простые и понятные, ничего лишнего.
-> Путь осилит идущий, а софт осилит любой деген🕵️
+## Key Features
 
-## Основные особенности 
+# Proxy support (including mobile)
+# Extensive logging, even your sneeze will be logged
+# Saving process for accounts
+# Repeater (in case of errors in modules)
+# Collection of unworked wallets
+# Logging saving in files by day
+# Parallel launch
+# Asynchronous OOP code
+# EIP-1559
+# Modules 🧩
 
-* **Поддержка прокси (включая мобильные)**
-* **Плотнейшее логирование, даже ваш чих залогируется**
-* **Сохранение процесса для аккаунтов**
-* **Повторитель (при ошибках в модулях)**
-* **Сбор не отработавших кошельков**
-* **Сохранение логов в файлы по дням**
-* **Параллельный запуск**
-* **Асинхронный ООП код**
-* **EIP-1559**
+    1.  Faucet       (receiving tokens from faucet)                                      
+    2.  BEX          (swaps $BERA to $STGUSDC, $BTC, $ETH, liquidity in pool $BERA/$STGUSDC)
+    3.  Bend         (adding and withdrawing $HONEY, $BTC, $ETH liquidity)
+    4.  Honey        (minting $HONEY for $STGUSDC)  
+    5.  Honey        (minting OOGA BOOGA TICKET)   
+    6.  Galxe        (completing daily tasks for 5 points by visiting Faucet)
 
-## 🧩Модули
+## Main Functions
 
-    1.  Faucet       (получение токенов с крана)                                       
-    2.  BEX          (свапы $BERA в $STGUSDC, $BTC, $ETH, ликвидность в пулл $BERA/$STGUSDC)
-    3.  Bend         (добавление и вывод $HONEY, $BTC, $ETH ликвидности)
-    4.  Honey        (минт $HONEY за $STGUSDC)    
-    5.  Honey        (минт OOGA BOOGA TICKET)    
-    6.  Galxe        (выполнение дейлика на 5 поинтов за посещение Faucet)
+1.  **🚀 Launch of all account runs through prepared classic routes**
 
-## ♾️Основные функции
+    This function will initiate route execution for all accounts. To make it work, you need to generate a route by running function №2 (Route Generation).
 
-1.  **🚀Запуск прогона всех аккаунтов по подготовленным классическим маршрутам**
+2.  **📄Generation of classic routes for each account**
 
-    Эта функция запустит выполнение маршрутов для всех аккаунтов. Чтобы она заработала, нужно сгенерировать маршрут, с помощью запуска функций №2 (Генерация маршрутов) 
+    Classic generator, works on the old-school method. You need to specify the module lists in the `CLASSIC_ROUTES_MODULES_USING` setting, and when you run this function, the software will build a route for you based on this setting. `None` is supported as one of the modules in the list; when it appears in the route, the software will skip this list.
 
-2.  **📄Генерация классических маршрутов для каждого аккаунта**
+3. **✅Checking all proxies for functionality**
 
-    Классический генератор, работает по дедовской методике. Вам нужно указать списки модулей в настройке `CLASSIC_ROUTES_MODULES_USING` и при запуске этой функции софт соберет вам маршрут по этой настройке. Поддерживается 
-    `None` как один из модулей в списке, при его попадании в маршрут, софт пропустит этот список.
+    Fast proxy check (really fast, as if it's torn off the chain)
 
-3. **✅Проверка всех прокси на работоспособность**
+## 📄Input of your data
 
-    Быстрая проверка прокси(реально быстрая, как с цепи срывается)
+### All necessary data must be specified in the `accounts_data` table in the `/data` folder.. 
+   1. **Name** -  names of your accounts, each name must be unique
+   2. **Private Key** - private keys from wallets
+   3. **Proxy** - proxy for each account. If there are fewer proxies, the software will take them in a circle. If the proxies are mobile, you can specify one proxy.
+   4. **Email address** - email address for the account.
+   5. **Email password** - email password for the account.
 
-## 📄Ввод своих данных
+You can set a password for your table and enable the `EXCEL_PASSWORD setting = True`. When the password is activated, the software will require it to be entered for further work. Useful when working on a server.
 
-### Все нужные данные необходимо указать в таблицу `accounts_data` в папке `/data`. 
-   1. **Name** - имена ваших аккаунтов, каждое название должно быть уникальным
-   2. **Private Key** - приватные ключи от кошельков
-   3. **Proxy** - прокси для каждого аккаунта. Если их будет меньше, софт будет брать их по кругу. Если прокси мобильные, то можно указать одну проксю.
-   4. **Email address** - адрес почты для аккаунта.
-   5. **Email password** - пароль от почты для аккаунта.
+## Software Setup
 
-Вы можете установить пароль на вашу таблицу и включить настройку `EXCEL_PASSWORD = True`. При активации пароля, софт будет требовать его ввести для дальнейшей работы. Полезно при работе на сервере.
+All settings are moved to the `general_settings.py` file. The most important settings will be duplicated here.
 
-## ⚙️Настройка софта
+1. `TWO_CAPTCHA_API_KEY` key. Specify your API key from 2captcha. There is a link in the file to the website where you can get the key.
+2. Setting `EXCEL_PAGE_NAME`. The name of the sheet in the Excel table.
+3. In the `CLASSIC_ROUTES_MODULES_USING` setting, specify the route for account operation.
 
-Все настройки вынесены в файл `general_settings.py`.
-Самые важные настройки продублирую здесь. 
+## 🛠️Installation and Project Launch
 
-1. Ключ `TWO_CAPTCHA_API_KEY`. Укажите ваш API ключ от **2captcha**. В файле есть ссылка на сайт, где это можно получить ключ
-2. Настройка `EXCEL_PAGE_NAME`. Название листа в таблице Excel. 
-3. В настройке `CLASSIC_ROUTES_MODULES_USING` указать маршрут для работы аккаунтов. 
+> By installing the project, you accept the risks of using software for money mining (losing your ass, money, virginity).
 
-## 🛠️Установка и запуск проекта
+Once you have downloaded the project, make sure you have Python 3.10.11
 
-> Устанавливая проект, вы принимаете риски использования софта для добывания денег(потерять жопу, деньги, девственность).
-
-Как только вы скачаете проект, **убедитесь**, что у вас Python 3.10.11
-
-Установка проекта
-
-```bash
-  git clone https://github.com/realaskaer/BeraMachine.git
-```
-
-Для установки необходимых библиотек, пропишите в консоль
-
-```bash
-  pip install -r requirements.txt
-```
-
-Запуск проекта
-
-```bash
-  cd beramachine
-  python main.py
-```
-
-## 🔗 Ссылки на установку Python и PyCharm
-
- - [Установка PyCharm](https://www.jetbrains.com/pycharm/download/?section=windows)
- - [Установка Python](https://www.python.org/downloads/windows/) (Вам нужна версия 3.10.11)
-
-## ❔Куда писать свой вопрос?
-
-- [@askaer.foundation](https://t.me/askaer) - мой канал в телеграм  
-- [@askaer.chat](https://t.me/askaerchat) - ответы на любой вопрос
-- [@askaer](https://t.me/realaskaer) - **при обнаружении бомбы в коде**  
-
-## ❤️‍🔥Donate (Any EVM)
-
-### `0x000000a679C2FB345dDEfbaE3c42beE92c0Fb7A5`
-> Спасибо за поддержку❤️
+--------------------------------------------------------
