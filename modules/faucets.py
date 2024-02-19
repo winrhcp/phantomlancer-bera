@@ -22,11 +22,10 @@ class Faucet(Logger, RequestClient):
         payload = {
             "clientKey": TWO_CAPTCHA_API_KEY,
             "task": {
-                "type": "RecaptchaV3TaskProxyless",
+                "type": "TurnstileTask",
                 "websiteURL": "https://artio.faucet.berachain.com/",
-                "websiteKey": "6LfOA04pAAAAAL9ttkwIz40hC63_7IsaU2MgcwVH",
-                "minScore": 0.9,
-                "pageAction": "submit"
+                "websiteKey": "0x4AAAAAAARdAuciFArKhVwt",
+                "userAgent": self.client.session.headers['User-Agent']
             }
         }
 
@@ -50,7 +49,7 @@ class Faucet(Logger, RequestClient):
             response = await self.make_request(method="POST", url=url, json=payload)
 
             if response['status'] == 'ready':
-                return response['solution']['gRecaptchaResponse']
+                return response['solution']['token']
 
             total_time += 5
             await asyncio.sleep(5)
@@ -62,15 +61,15 @@ class Faucet(Logger, RequestClient):
     async def claim_berachain_tokens(self):
 
         self.logger_msg(*self.client.acc_info, msg=f'Claiming $BERA on faucet')
-
-        url = 'https://artio-80085-faucet-api-recaptcha.berachain.com/api/claim'
+        # url = 'https://artio-80085-faucet-api-recaptcha.berachain.com/api/claim'
+        url = 'https://artio-80085-faucet-api-cf.berachain.com/api/claim'
 
         task_id = await self.create_task_for_captcha()
         captcha_key = await self.get_captcha_key(task_id)
         self.logger_msg(*self.client.acc_info, msg=f'captcha_key : {captcha_key}')
 
         headers = {
-            "authority": "artio-80085-faucet-api-recaptcha.berachain.com",
+            "authority": "artio-80085-faucet-api-cf.berachain.com",
             "method": "POST",
             "path": f"/api/claim?address={self.client.address}",
             "scheme": "https",
