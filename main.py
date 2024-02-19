@@ -38,6 +38,7 @@ def main():
                 'What do you want to do?',
                 choices=[
                     Choice("🚀 Start running classic routes for each wallet", 'classic_routes_run'),
+                    Choice("📄 Generate faucet-route for each wallet", 'faucet_routes_gen'),
                     Choice("📄 Generate classic-route for each wallet", 'classic_routes_gen'),
                     Choice("✅ Check the connection of each proxy", 'check_proxy'),
                     Choice('❌ Exit', "exit")
@@ -56,6 +57,9 @@ def main():
                 print()
                 asyncio.run(runner.run_accounts())
                 print()
+            elif answer == 'faucet_routes_gen':
+                generator = RouteGenerator()
+                are_you_sure(generator.faucet_routes_json_save, gen_route=True)
             elif answer == 'classic_routes_gen':
                 generator = RouteGenerator()
                 are_you_sure(generator.classic_routes_json_save, gen_route=True)

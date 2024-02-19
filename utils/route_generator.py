@@ -50,6 +50,14 @@ class RouteGenerator(Logger):
             module = get_func_by_name(module_name)
             route.append(module.__name__)
         return route
+    @staticmethod
+    def faucet_generate_route():
+        route = []
+        # Extract the module name from the sublist
+        module_name = CLASSIC_ROUTES_MODULES_USING[0][0]  # The module is the first element of the first sublist
+        module = get_func_by_name(module_name)
+        route.append(module.__name__)
+        return route
 
     def classic_routes_json_save(self):
         clean_progress_file()
@@ -67,4 +75,21 @@ class RouteGenerator(Logger):
         self.logger_msg(
             None, None,
             f'Successfully generated {len(accounts_data)} classic routes in data/services/wallets_progress.json\n',
+            'success')
+    def faucet_routes_json_save(self):
+        clean_progress_file()
+        with open('./data/services/wallets_progress.json', 'w') as file:
+            accounts_data = {}
+            for account_name in ACCOUNT_NAMES:
+                if isinstance(account_name, (str, int)):
+                    classic_route = self.faucet_generate_route()
+                    account_data = {
+                        "current_step": 0,
+                        "route": classic_route
+                    }
+                    accounts_data[str(account_name)] = account_data
+            json.dump(accounts_data, file, indent=4)
+        self.logger_msg(
+            None, None,
+            f'Successfully generated {len(accounts_data)} faucet routes in data/services/wallets_progress.json\n',
             'success')

@@ -67,6 +67,7 @@ class Faucet(Logger, RequestClient):
 
         task_id = await self.create_task_for_captcha()
         captcha_key = await self.get_captcha_key(task_id)
+        self.logger_msg(*self.client.acc_info, msg=f'captcha_key : {captcha_key}')
 
         headers = {
             "authority": "artio-80085-faucet-api-recaptcha.berachain.com",
@@ -91,38 +92,41 @@ class Faucet(Logger, RequestClient):
         params = {
             "address": f"{self.client.address}"
         }
+        try:
+            response = (await self.make_request(method="POST", url=url, params=params, json=params, headers=headers))['msg']
 
-        response = (await self.make_request(method="POST", url=url, params=params, json=params, headers=headers))['msg']
+            self.logger_msg(*self.client.acc_info, msg=f'$BERA was successfully claimed on faucet', type_msg='success')
 
-        self.logger_msg(*self.client.acc_info, msg=f'$BERA was successfully claimed on faucet', type_msg='success')
+            if WAIT_FAUCET:
+                self.logger_msg(*self.client.acc_info, msg=f'Waiting to receive $BERA from faucet')
 
-        if WAIT_FAUCET:
-            self.logger_msg(*self.client.acc_info, msg=f'Waiting to receive $BERA from faucet')
+                tx_hash = response.split()[-1]
 
-            tx_hash = response.split()[-1]
+                poll_latency = 60
+                while True:
+                    try:
+                        receipts = await self.client.w3.eth.get_transaction_receipt(tx_hash)
 
-            poll_latency = 60
-            while True:
-                try:
-                    receipts = await self.client.w3.eth.get_transaction_receipt(tx_hash)
-
-                    status = receipts.get("status")
-                    if status == 1:
-                        message = f'Transaction was successful: {self.client.explorer}tx/{tx_hash}'
-                        self.logger_msg(*self.client.acc_info, msg=message, type_msg='success')
-                        return True
-                    elif status is None:
-                        self.logger_msg(
-                            *self.client.acc_info, msg=f'Still waiting $BERA from faucet', type_msg='warning')
+                        status = receipts.get("status")
+                        if status == 1:
+                            message = f'Transaction was successful: {self.client.explorer}tx/{tx_hash}'
+                            self.logger_msg(*self.client.acc_info, msg=message, type_msg='success')
+                            return True
+                        elif status is None:
+                            self.logger_msg(
+                                *self.client.acc_info, msg=f'Still waiting $BERA from faucet', type_msg='warning')
+                            await asyncio.sleep(poll_latency)
+                        else:
+                            raise SoftwareException(f'Transaction failed: {self.client.explorer}tx/{tx_hash}')
+                    except TransactionNotFound:
+                        self.logger_msg(*self.client.acc_info, msg=f'Still waiting $BERA from faucet', type_msg='warning')
                         await asyncio.sleep(poll_latency)
-                    else:
-                        raise SoftwareException(f'Transaction failed: {self.client.explorer}tx/{tx_hash}')
-                except TransactionNotFound:
-                    self.logger_msg(*self.client.acc_info, msg=f'Still waiting $BERA from faucet', type_msg='warning')
-                    await asyncio.sleep(poll_latency)
-                except Exception as error:
-                    self.logger_msg(
-                        *self.client.acc_info, msg=f'RPC got autims response. Error: {error}', type_msg='warning')
-                    await asyncio.sleep(poll_latency)
-        else:
-            return True
+                    except Exception as error:
+                        self.logger_msg(
+                            *self.client.acc_info, msg=f'RPC got autims response. Error: {error}', type_msg='warning')
+                        await asyncio.sleep(poll_latency)
+            else:
+                return True
+        except Exception as e:
+            # Handle the exception gracefully
+            self.logger_msg(*self.client.acc_info, msg=f'Error occurred: {e}', type_msg='error')
