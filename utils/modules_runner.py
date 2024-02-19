@@ -249,6 +249,7 @@ class Runner(Logger):
     async def run_consistently(self):
 
         accounts_data = self.get_wallets()
+        print("accounts_data : " + json.dumps(accounts_data))
 
         for account_name, private_key in accounts_data:
 

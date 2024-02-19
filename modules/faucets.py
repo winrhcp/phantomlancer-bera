@@ -6,6 +6,7 @@ from general_settings import TWO_CAPTCHA_API_KEY, WAIT_FAUCET
 from modules import Logger, RequestClient
 from modules.interfaces import SoftwareException
 from utils.tools import helper
+import json
 
 
 class Faucet(Logger, RequestClient):
@@ -18,14 +19,13 @@ class Faucet(Logger, RequestClient):
 
     async def create_task_for_captcha(self):
         url = 'https://api.2captcha.com/createTask'
-
         payload = {
             "clientKey": TWO_CAPTCHA_API_KEY,
             "task": {
-                "type": "TurnstileTask",
+                "type": "TurnstileTaskProxyless",
                 "websiteURL": "https://artio.faucet.berachain.com/",
                 "websiteKey": "0x4AAAAAAARdAuciFArKhVwt",
-                "userAgent": self.client.session.headers['User-Agent']
+                "userAgent": self.client.session.headers['User-Agent'],
             }
         }
 
@@ -33,6 +33,10 @@ class Faucet(Logger, RequestClient):
 
         if not response['errorId']:
             return response['taskId']
+        if isinstance(response, (dict, list)):
+            print("response : " + json.dumps(response))
+        else:
+            print("response : " + str(response))
         raise SoftwareException('Bad request to 2Captcha(Create Task)')
 
     async def get_captcha_key(self, task_id):
@@ -69,7 +73,7 @@ class Faucet(Logger, RequestClient):
         self.logger_msg(*self.client.acc_info, msg=f'captcha_key : {captcha_key}')
 
         headers = {
-            "authority": "artio-80085-faucet-api-cf.berachain.com",
+            "authority": "https://artio.faucet.berachain.com/",
             "method": "POST",
             "path": f"/api/claim?address={self.client.address}",
             "scheme": "https",
