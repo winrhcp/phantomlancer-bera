@@ -62,3 +62,7 @@ All settings are moved to the `general_settings.py` file. The most important set
 Once you have downloaded the project, make sure you have Python 3.10.11
 
 --------------------------------------------------------
+
+docker build -t bera .
+docker run -it --rm bera /bin/bash
+python main.py
