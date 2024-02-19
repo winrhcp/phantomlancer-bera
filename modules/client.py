@@ -1,9 +1,9 @@
 import asyncio
 import random
+import aiohttp
 import ssl
 
 from asyncio import sleep
-from aiohttp import ClientSession
 from aiohttp_socks import ProxyConnector
 from web3.exceptions import TransactionNotFound, TimeExhausted
 from modules.interfaces import BlockchainException, SoftwareException
@@ -25,12 +25,19 @@ class Client(Logger):
         self.explorer = BeraChainRPC.explorer
         self.chain_id = BeraChainRPC.chain_id
 
-        self.proxy_init = proxy
+        if proxy is not None:
+            self.proxy_init = proxy
 
-        self.session = ClientSession(connector=ProxyConnector.from_url(f'http://{proxy}', ssl=ssl.create_default_context(), verify_ssl=True))
-        self.request_kwargs = {"proxy": f"http://{proxy}"} if proxy else {}
+        if proxy is None:
+            connector = aiohttp.TCPConnector()
+        else:
+            connector = ProxyConnector.from_url(f'http://{proxy}', ssl=ssl.create_default_context(), verify_ssl=True)
+
+        self.session = aiohttp.ClientSession(connector=connector)
+        # self.request_kwargs = {"proxy": f"http://{proxy}"} if proxy else {}
         self.rpc = random.choice(BeraChainRPC.rpc)
-        self.w3 = AsyncWeb3(AsyncHTTPProvider(self.rpc, request_kwargs=self.request_kwargs))
+        # self.w3 = AsyncWeb3(AsyncHTTPProvider(self.rpc, request_kwargs=self.request_kwargs))
+        self.w3 = AsyncWeb3(AsyncHTTPProvider(self.rpc))
         self.account_name = str(account_name)
         self.private_key = private_key
         self.address = AsyncWeb3.to_checksum_address(self.w3.eth.account.from_key(private_key).address)

@@ -37,7 +37,6 @@ def get_accounts_data():
             proxy = row["Proxy"]
             email_address = row['Email Address']
             email_password = row['Email Password']
-
             accounts_data[int(index) + 1] = {
                 "account_number": account_name,
                 "private_key": private_key,
@@ -54,11 +53,10 @@ def get_accounts_data():
                 email_addresses.append(v['email_address'] if isinstance(v['email_address'], str) else None)
                 email_passwords.append(v['email_password'] if isinstance(v['email_password'], str) else None)
 
-            acc_names = [str(item) for item in acc_names if item is not None]
-            proxies = [item for item in proxies if item is not None]
-            email_addresses = [item for item in email_addresses if item is not None]
-            email_passwords = [item for item in email_passwords if item is not None]
-
+            acc_names = [str(item) for item in acc_names]
+            proxies = [item for item in proxies]
+            email_addresses = [item for item in email_addresses]
+            email_passwords = [item for item in email_passwords]
             return acc_names, private_keys, proxies, email_addresses, email_passwords
 
     except ImportError:
