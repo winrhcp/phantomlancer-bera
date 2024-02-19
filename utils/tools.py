@@ -45,19 +45,19 @@ def get_accounts_data():
                 "email_password": email_password,
             }
 
-            acc_names, private_keys, proxies, email_addresses, email_passwords = [], [], [], [], []
-            for k, v in accounts_data.items():
-                acc_names.append(v['account_number'] if isinstance(v['account_number'], (int, str)) else None)
-                private_keys.append(v['private_key'])
-                proxies.append(v['proxy'] if isinstance(v['proxy'], str) else None)
-                email_addresses.append(v['email_address'] if isinstance(v['email_address'], str) else None)
-                email_passwords.append(v['email_password'] if isinstance(v['email_password'], str) else None)
+        acc_names, private_keys, proxies, email_addresses, email_passwords = [], [], [], [], []
+        for k, v in accounts_data.items():
+            acc_names.append(v['account_number'] if isinstance(v['account_number'], (int, str)) else None)
+            private_keys.append(v['private_key'])
+            proxies.append(v['proxy'] if isinstance(v['proxy'], str) else None)
+            email_addresses.append(v['email_address'] if isinstance(v['email_address'], str) else None)
+            email_passwords.append(v['email_password'] if isinstance(v['email_password'], str) else None)
 
-            acc_names = [str(item) for item in acc_names]
-            proxies = [item for item in proxies]
-            email_addresses = [item for item in email_addresses]
-            email_passwords = [item for item in email_passwords]
-            return acc_names, private_keys, proxies, email_addresses, email_passwords
+        acc_names = [str(item) for item in acc_names]
+        proxies = [item for item in proxies]
+        email_addresses = [item for item in email_addresses]
+        email_passwords = [item for item in email_passwords]
+        return acc_names, private_keys, proxies, email_addresses, email_passwords
 
     except ImportError:
         cprint(f'\nAre you sure about EXCEL_PASSWORD in general_settings.py?', color='light_red')
