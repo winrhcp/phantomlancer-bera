@@ -22,7 +22,7 @@ class Custom(Logger, RequestClient):
         data = from_token_name, to_token_name, amount, amount_in_wei
 
         result = await swap_bex(self.client.account_name, self.client.private_key,
-                                self.client.proxy_init, swapdata=data)
+                                getattr(self.client, 'proxy_init', None), swapdata=data)
 
         return result
 
@@ -38,7 +38,7 @@ class Custom(Logger, RequestClient):
         data = from_token_name, to_token_name, amount, amount_in_wei
 
         result = await swap_bex(self.client.account_name, self.client.private_key,
-                                self.client.proxy_init, swapdata=data)
+                                getattr(self.client, 'proxy_init', None), swapdata=data)
 
         return result
 
@@ -54,7 +54,7 @@ class Custom(Logger, RequestClient):
         data = from_token_name, to_token_name, amount, amount_in_wei
 
         result = await swap_bex(self.client.account_name, self.client.private_key,
-                                self.client.proxy_init, swapdata=data)
+                                getattr(self.client, 'proxy_init', None), swapdata=data)
 
         return result
 
@@ -70,6 +70,6 @@ class Custom(Logger, RequestClient):
         data = from_token_name, to_token_name, amount, amount_in_wei
 
         result = await swap_bex(self.client.account_name, self.client.private_key,
-                                self.client.proxy_init, swapdata=data)
+                                getattr(self.client, 'proxy_init', None), swapdata=data)
 
         return result
